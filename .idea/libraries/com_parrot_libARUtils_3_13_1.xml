@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="com.parrot:libARUtils-3.13.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/libARUtils-3.13.1.aar/2cbd14f802952517996677c87cc92ce5/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/libARUtils-3.13.1.aar/2cbd14f802952517996677c87cc92ce5/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.parrot/libARUtils/3.13.1/d063ec6ee93a2198394641071b4f5e09822fec0f/libARUtils-3.13.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

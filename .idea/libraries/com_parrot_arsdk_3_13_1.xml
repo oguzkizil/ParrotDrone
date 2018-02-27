@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="com.parrot:arsdk-3.13.1">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/arsdk-3.13.1.aar/f9f870ec35bbe7907493d7b2a329d415/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/arsdk-3.13.1.aar/f9f870ec35bbe7907493d7b2a329d415/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.parrot/arsdk/3.13.1/4689c565a684f17de666bbe0fb0d85f37302fb13/arsdk-3.13.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

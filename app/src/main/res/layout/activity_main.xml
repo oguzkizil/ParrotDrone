@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ouz.parrot.activity.MainActivity"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="320dp"
+        android:layout_height="250dp"
+        android:contentDescription="TODO"
+        app:srcCompat="@drawable/parrot" />
+
+    <Button
+        android:layout_width="181dp"
+        android:layout_height="89dp"
+        android:background="@drawable/buttonstyle"
+        android:onClick="GosterPopup"
+        android:text="@string/button"
+        android:textColor="@color/white" />
+
+</LinearLayout>
