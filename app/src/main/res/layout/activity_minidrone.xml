@@ -6,7 +6,7 @@
     tools:context=".activity.MiniDroneActivity"
     android:id="@+id/piloting_view">
 
-    <com.parrot.sdksample.view.H264VideoView
+    <com.parrot.view.H264VideoView
         android:id="@+id/videoView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
@@ -169,4 +169,13 @@
         android:layout_alignRight="@+id/gazDownBt"
         android:layout_alignEnd="@+id/gazDownBt"
         android:gravity="center_horizontal"/>
+
+    <Button
+        android:id="@+id/btnBas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gazDownBt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp"
+        android:text="BANA BAS" />
 </RelativeLayout>

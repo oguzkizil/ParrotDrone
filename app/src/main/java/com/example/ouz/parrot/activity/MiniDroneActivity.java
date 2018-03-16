@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,10 +15,13 @@ import android.widget.TextView;
 import com.example.ouz.parrot.view.H264VideoView;
 import com.example.ouz.parrot.drone.MiniDrone;
 import com.example.ouz.parrot.R;
+import com.parrot.arsdk.arcommands.ARCOMMANDS_ARDRONE3_ANIMATIONS_FLIP_DIRECTION_ENUM;
+import com.parrot.arsdk.arcommands.ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_ENUM;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_MINIDRONE_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_MINIDRONE_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_ENUM;
 import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
 import com.parrot.arsdk.arcontroller.ARControllerCodec;
+import com.parrot.arsdk.arcontroller.ARDeviceController;
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
@@ -34,9 +38,13 @@ public class MiniDroneActivity extends AppCompatActivity {
     private TextView mBatteryLabel;
     private Button mTakeOffLandBt;
     private Button mDownloadBt;
+    private Button btnBas;
 
     private int mNbMaxDownload;
     private int mCurrentDownloadIndex;
+
+    private ARDeviceController controller;
+    Thread thread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,79 @@ public class MiniDroneActivity extends AppCompatActivity {
         ARDiscoveryDeviceService service = intent.getParcelableExtra(DeviceListActivity.EXTRA_DEVICE_SERVICE);
         mMiniDrone = new MiniDrone(this, service);
         mMiniDrone.addListener(mMiniDroneListener);
+        btnBas = (Button) findViewById(R.id.btnBas);
+        btnBas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                banaBas();
+            }
+
+        });
+
+
+
+
+    }
+
+    public void banaBas(){
+        thread = new Thread(){
+            @Override
+            public void run(){
+                try {
+                    synchronized (this){
+                        mMiniDrone.setFlag((byte) 1);
+                        mMiniDrone.setPitch((byte) -50); //pitch ileri ve geri
+                        sleep(1000);
+
+                        mMiniDrone.setFlag((byte) 0);
+                        mMiniDrone.setPitch((byte) 0);
+                        sleep(2000);
+
+
+
+                        mMiniDrone.setFlag((byte) 1);
+                        mMiniDrone.setYaw((byte) 20); //yaw sağa sola dönme
+                        sleep(500);
+
+                        mMiniDrone.setFlag((byte) 0);
+                        mMiniDrone.setPitch((byte) 0);
+                        sleep(2000);
+
+                        mMiniDrone.setFlag((byte) 1);
+                        mMiniDrone.setPitch((byte) 50);
+                        sleep(1000);
+
+                        mMiniDrone.setFlag((byte) 1);
+                        mMiniDrone.setYaw((byte) -20);
+                        sleep(1000);
+
+                        mMiniDrone.setFlag((byte) 0);
+                        mMiniDrone.setPitch((byte) 0);
+                        sleep(2000);
+
+                        mMiniDrone.setFlag((byte) 1);
+                        mMiniDrone.setPitch((byte) 50);
+                        sleep(1000);
+
+
+                        mMiniDrone.setFlag((byte) 0);
+                        mMiniDrone.setPitch((byte) 0);
+                        sleep(1000);
+
+                    }
+                }
+                catch (Exception e){
+                    Log.d("hata","xd");
+                }finally {
+                    //takla sadece controller içerisinde mevcut fakat şuan çalışmıyor
+                    controller.getFeatureMiniDrone().sendAnimationsFlip((ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_ENUM.ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_BACK));
+                    mMiniDrone.land();
+                }
+            }
+        };
+
+        thread.start();
 
     }
 

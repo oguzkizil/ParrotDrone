@@ -31,6 +31,8 @@
         <service android:name="com.parrot.arsdk.ardiscovery.ARDiscoveryService" />
 
         <activity android:name=".activity.DeviceListActivity"></activity>
+
+        <activity android:name=".activity.MiniDroneActivity"></activity>
     </application>
 
 </manifest>
