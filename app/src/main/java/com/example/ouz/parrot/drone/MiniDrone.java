@@ -5,6 +5,10 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.parrot.arsdk.arcommands.ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM;
+import com.parrot.arsdk.arcommands.ARCOMMANDS_ANIMATION_STATE_ENUM;
+import com.parrot.arsdk.arcommands.ARCOMMANDS_ANIMATION_TYPE_ENUM;
+import com.parrot.arsdk.arcommands.ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_ENUM;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_MINIDRONE_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_MINIDRONE_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_ENUM;
 import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
@@ -17,6 +21,7 @@ import com.parrot.arsdk.arcontroller.ARControllerException;
 import com.parrot.arsdk.arcontroller.ARDeviceController;
 import com.parrot.arsdk.arcontroller.ARDeviceControllerListener;
 import com.parrot.arsdk.arcontroller.ARDeviceControllerStreamListener;
+import com.parrot.arsdk.arcontroller.ARFeatureAnimation;
 import com.parrot.arsdk.arcontroller.ARFeatureCommon;
 import com.parrot.arsdk.arcontroller.ARFeatureMiniDrone;
 import com.parrot.arsdk.arcontroller.ARFrame;
@@ -101,6 +106,10 @@ public class MiniDrone {
          * @param mediaName the name of the media
          */
         void onDownloadComplete(String mediaName);
+
+        void onAnimationTypeChanged(ARCOMMANDS_ANIMATION_TYPE_ENUM type, byte percent);
+
+        void onAnimationStateChanged(ARCOMMANDS_ANIMATION_STATE_ENUM state );
     }
 
     private final List<Listener> mListeners;
@@ -116,6 +125,10 @@ public class MiniDrone {
     private String mCurrentRunId;
     private ARDISCOVERY_PRODUCT_ENUM mProductType;
     private ARDiscoveryDeviceService mDeviceService;
+
+    private ARCOMMANDS_ANIMATION_TYPE_ENUM animeType;
+    private ARCOMMANDS_ANIMATION_STATE_ENUM animeState;
+    private ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM animeFlipType;
 
     private ARUtilsManager mFtpListManager;
     private ARUtilsManager mFtpQueueManager;
@@ -213,6 +226,18 @@ public class MiniDrone {
         return mFlyingState;
     }
 
+    public ARCOMMANDS_ANIMATION_STATE_ENUM getAnimationState(){
+        return animeState;
+    }
+
+    public ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM getAnimationFlipType(){
+        return animeFlipType;
+    }
+
+    public ARCOMMANDS_ANIMATION_TYPE_ENUM getAnimeType(){
+        return animeType;
+    }
+
     public void takeOff() {
         if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
             mDeviceController.getFeatureMiniDrone().sendPilotingTakeOff();
@@ -283,6 +308,31 @@ public class MiniDrone {
     public void setFlag(byte flag) {
         if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
             mDeviceController.getFeatureMiniDrone().setPilotingPCMDFlag(flag);
+        }
+    }
+
+    public void flip(ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM type){
+        if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
+            //BURAYA DİKKAT**************************************************
+            if((getAnimeType().equals( ARCOMMANDS_ANIMATION_TYPE_ENUM.FLIP))&&(getAnimationState().equals(ARCOMMANDS_ANIMATION_STATE_ENUM.IDLE))){
+           try {
+               switch (type){
+                   case BACK: mDeviceController.getFeatureMiniDrone().sendAnimationsFlip(ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_ENUM.ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_BACK);
+                       break;
+                   case LEFT: mDeviceController.getFeatureMiniDrone().sendAnimationsFlip(ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_ENUM.ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_LEFT);
+                       break;
+                   case FRONT: mDeviceController.getFeatureMiniDrone().sendAnimationsFlip(ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_ENUM.ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_FRONT);
+                       break;
+                   case RIGHT: mDeviceController.getFeatureMiniDrone().sendAnimationsFlip(ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_ENUM.ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_RIGHT);
+                       break;
+                   default: mDeviceController.getFeatureMiniDrone().sendAnimationsFlip(ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_ENUM.ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_BACK);
+                       break;
+               }
+           }catch (Exception e){
+               Log.e(TAG, "Taklada sıkıntı var ");
+           }
+           }
+
         }
     }
 
@@ -416,6 +466,20 @@ public class MiniDrone {
             listener.onDownloadComplete(mediaName);
         }
     }
+
+    private void notifyAnimationStateChanged(ARCOMMANDS_ANIMATION_STATE_ENUM state) {
+        List<Listener> listenersCpy = new ArrayList<>(mListeners);
+        for (Listener listener : listenersCpy) {
+            listener.onAnimationStateChanged(state);
+        }
+    }
+
+    private void notifyAnimationTypeChanged(ARCOMMANDS_ANIMATION_TYPE_ENUM type,byte percent) {
+        List<Listener> listenersCpy = new ArrayList<>(mListeners);
+        for (Listener listener : listenersCpy) {
+            listener.onAnimationTypeChanged(type,percent);
+        }
+    }
     //endregion notify listener block
 
     private final SDCardModule.Listener mSDCardModuleListener = new SDCardModule.Listener() {
@@ -533,6 +597,36 @@ public class MiniDrone {
                         @Override
                         public void run() {
                             mCurrentRunId = runID;
+                        }
+                    });
+                } //ANIME STATE
+            }else if ((commandKey == ARCONTROLLER_DICTIONARY_KEY_ENUM.ARCONTROLLER_DICTIONARY_KEY_ANIMATION_STATE) && (elementDictionary != null)){
+                ARControllerArgumentDictionary<Object> args = elementDictionary.get(ARControllerDictionary.ARCONTROLLER_DICTIONARY_SINGLE_KEY);
+                if (args != null) {
+                    final ARCOMMANDS_ANIMATION_TYPE_ENUM type = ARCOMMANDS_ANIMATION_TYPE_ENUM.getFromValue((Integer)args.get(ARFeatureAnimation.ARCONTROLLER_DICTIONARY_KEY_ANIMATION_STATE_TYPE));
+                    final byte percent = (byte)((Integer)args.get(ARFeatureAnimation.ARCONTROLLER_DICTIONARY_KEY_ANIMATION_STATE_PERCENT)).intValue();
+
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            animeType = type;
+                            notifyAnimationTypeChanged(type,percent);
+                        }
+                    });
+
+                }//FLIPPERONI STATE
+            } else if ((commandKey == ARCONTROLLER_DICTIONARY_KEY_ENUM.ARCONTROLLER_DICTIONARY_KEY_ANIMATION_FLIPSTATE) && (elementDictionary != null)){
+                ARControllerArgumentDictionary<Object> args = elementDictionary.get(ARControllerDictionary.ARCONTROLLER_DICTIONARY_SINGLE_KEY);
+                if (args != null) {
+                    final ARCOMMANDS_ANIMATION_STATE_ENUM state = ARCOMMANDS_ANIMATION_STATE_ENUM.getFromValue((Integer)args.get(ARFeatureAnimation.ARCONTROLLER_DICTIONARY_KEY_ANIMATION_FLIPSTATE_STATE));
+                    final ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM type = ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM.getFromValue((Integer)args.get(ARFeatureAnimation.ARCONTROLLER_DICTIONARY_KEY_ANIMATION_FLIPSTATE_TYPE));
+
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            animeState=state;
+                            animeFlipType = type;
+                            notifyAnimationStateChanged(state);
                         }
                     });
                 }
