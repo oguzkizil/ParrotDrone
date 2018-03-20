@@ -313,8 +313,8 @@ public class MiniDrone {
 
     public void flip(ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM type){
         if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
-            //BURAYA DİKKAT**************************************************
-            if((getAnimeType().equals( ARCOMMANDS_ANIMATION_TYPE_ENUM.FLIP))&&(getAnimationState().equals(ARCOMMANDS_ANIMATION_STATE_ENUM.IDLE))){
+            
+
            try {
                switch (type){
                    case BACK: mDeviceController.getFeatureMiniDrone().sendAnimationsFlip(ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_ENUM.ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_BACK);
@@ -331,8 +331,6 @@ public class MiniDrone {
            }catch (Exception e){
                Log.e(TAG, "Taklada sıkıntı var ");
            }
-           }
-
         }
     }
 
