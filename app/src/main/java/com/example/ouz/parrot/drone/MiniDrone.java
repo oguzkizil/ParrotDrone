@@ -313,7 +313,7 @@ public class MiniDrone {
 
     public void flip(ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM type){
         if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
-            
+
 
            try {
                switch (type){
