@@ -1,69 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="350dp"
-    android:layout_height="475dp"
-    android:background="@color/colorPrimaryDark"
-    android:padding="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical"
+    android:padding="5dp"
     tools:context=".activity.DeviceListActivity">
+
     <TextView
         android:id="@+id/txtclose"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:textColor="@color/white"
-        android:text="X"
-        android:textStyle="bold"
         android:layout_gravity="end"
+        android:background="@drawable/drawable"
         android:gravity="center"
-        android:background="@drawable/drawable"/>
+        android:text="X"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:textColor="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Parrot Mambo"
-            android:textStyle="bold"
-            android:textSize="25dp"
-            android:textColor="@color/white"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="5dp"
+            android:text="Parrot Mambo"
+            android:textColor="@color/white"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
             android:text="Bağlanabilir Cihazlar"
             android:textColor="@color/white"
-            android:textSize="20dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp"/>
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+            android:textSize="20dp" />
 
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="294dp">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    </ListView>
-</FrameLayout>
+            <ListView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="294dp"
+                android:textColor="@color/colorAccent">
+
+            </ListView>
+        </FrameLayout>
 
     </LinearLayout>
 
-
-
-    <Button
-        android:id="@+id/btnbaglan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Baglan"
-        android:layout_marginTop="25dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/buttonstyle"
-        android:textColor="@color/white"/>
 
 </LinearLayout>

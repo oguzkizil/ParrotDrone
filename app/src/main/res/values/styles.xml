@@ -12,5 +12,10 @@
         <item name="android:textColorPrimary">@color/primary_text</item>
         <item name="android:background">@color/primary_light</item>
     </style>
-
+    <style name="baslatbutton" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">
+            @color/colorAccent
+        </item>
+        <item name="android:background">@drawable/baslatbutton</item>
+    </style>
 </resources>

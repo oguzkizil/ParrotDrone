@@ -1,6 +1,7 @@
 package com.example.ouz.parrot.activity;
 
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothClass;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,15 +16,22 @@ import android.widget.TextView;
 import com.example.ouz.parrot.view.H264VideoView;
 import com.example.ouz.parrot.drone.MiniDrone;
 import com.example.ouz.parrot.R;
+import com.parrot.arsdk.arcommands.ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM;
+import com.parrot.arsdk.arcommands.ARCOMMANDS_ANIMATION_STATE_ENUM;
+import com.parrot.arsdk.arcommands.ARCOMMANDS_ANIMATION_TYPE_ENUM;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_ARDRONE3_ANIMATIONS_FLIP_DIRECTION_ENUM;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_ENUM;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_MINIDRONE_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM;
 import com.parrot.arsdk.arcommands.ARCOMMANDS_MINIDRONE_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_ENUM;
 import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
+import com.parrot.arsdk.arcontroller.ARCONTROLLER_ERROR_ENUM;
 import com.parrot.arsdk.arcontroller.ARControllerCodec;
+import com.parrot.arsdk.arcontroller.ARControllerException;
 import com.parrot.arsdk.arcontroller.ARDeviceController;
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
+
+import static com.parrot.arsdk.arcommands.ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_ENUM.ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_BACK;
 
 
 public class MiniDroneActivity extends AppCompatActivity {
@@ -43,7 +51,6 @@ public class MiniDroneActivity extends AppCompatActivity {
     private int mNbMaxDownload;
     private int mCurrentDownloadIndex;
 
-    private ARDeviceController controller;
     Thread thread;
 
     @Override
@@ -52,23 +59,19 @@ public class MiniDroneActivity extends AppCompatActivity {
         setContentView(R.layout.activity_minidrone);
 
         initIHM();
-
         Intent intent = getIntent();
         ARDiscoveryDeviceService service = intent.getParcelableExtra(DeviceListActivity.EXTRA_DEVICE_SERVICE);
         mMiniDrone = new MiniDrone(this, service);
         mMiniDrone.addListener(mMiniDroneListener);
         btnBas = (Button) findViewById(R.id.btnBas);
+
         btnBas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 banaBas();
             }
 
         });
-
-
-
 
     }
 
@@ -86,7 +89,7 @@ public class MiniDroneActivity extends AppCompatActivity {
                         mMiniDrone.setPitch((byte) 0);
                         sleep(2000);
 
-
+                        mMiniDrone.flip(ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM.FRONT);
 
                         mMiniDrone.setFlag((byte) 1);
                         mMiniDrone.setYaw((byte) 20); //yaw sağa sola dönme
@@ -96,35 +99,15 @@ public class MiniDroneActivity extends AppCompatActivity {
                         mMiniDrone.setPitch((byte) 0);
                         sleep(2000);
 
-                        mMiniDrone.setFlag((byte) 1);
-                        mMiniDrone.setPitch((byte) 50);
-                        sleep(1000);
 
-                        mMiniDrone.setFlag((byte) 1);
-                        mMiniDrone.setYaw((byte) -20);
-                        sleep(1000);
-
-                        mMiniDrone.setFlag((byte) 0);
-                        mMiniDrone.setPitch((byte) 0);
-                        sleep(2000);
-
-                        mMiniDrone.setFlag((byte) 1);
-                        mMiniDrone.setPitch((byte) 50);
-                        sleep(1000);
-
-
-                        mMiniDrone.setFlag((byte) 0);
-                        mMiniDrone.setPitch((byte) 0);
-                        sleep(1000);
 
                     }
                 }
                 catch (Exception e){
                     Log.d("hata","xd");
                 }finally {
-                    //takla sadece controller içerisinde mevcut fakat şuan çalışmıyor
-                    controller.getFeatureMiniDrone().sendAnimationsFlip((ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_ENUM.ARCOMMANDS_MINIDRONE_ANIMATIONS_FLIP_DIRECTION_BACK));
                     mMiniDrone.land();
+                    thread.interrupt();
                 }
             }
         };
@@ -524,6 +507,17 @@ public class MiniDroneActivity extends AppCompatActivity {
                 mDownloadProgressDialog.dismiss();
                 mDownloadProgressDialog = null;
             }
+        }
+
+        //ARAYÜZE KENDİ TAKLALARIMIZI KOYMAK İÇİN BURAYA YAZMAMIZ LAZIM
+        @Override
+        public void onAnimationTypeChanged(ARCOMMANDS_ANIMATION_TYPE_ENUM type, byte percent) {
+
+        }
+
+        @Override
+        public void onAnimationStateChanged(ARCOMMANDS_ANIMATION_STATE_ENUM state) {
+
         }
     };
 }

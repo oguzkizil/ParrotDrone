@@ -54,12 +54,20 @@ public class DeviceListActivity extends AppCompatActivity {
         ARSDK.loadSDKLibs();
     }
 
+    TextView txtClose;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup);
         final ListView listView = (ListView) findViewById(R.id.list);
+        txtClose = (TextView) findViewById(R.id.txtclose);
+        txtClose.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+               finish();
+            }
+        });
 
         // Assign adapter to ListView
         listView.setAdapter(mAdapter);
@@ -99,7 +107,7 @@ public class DeviceListActivity extends AppCompatActivity {
                     case ARDISCOVERY_PRODUCT_MINIDRONE_EVO_BRICK:
                     case ARDISCOVERY_PRODUCT_MINIDRONE_EVO_LIGHT:
                     case ARDISCOVERY_PRODUCT_MINIDRONE_DELOS3:
-                        intent = new Intent(DeviceListActivity.this, MiniDroneActivity.class);
+                        intent = new Intent(DeviceListActivity.this, PuzzleActivity.class);
                         break;
                     case ARDISCOVERY_PRODUCT_MINIDRONE_WINGX:
                         intent = new Intent(DeviceListActivity.this, SwingDroneActivity.class);
