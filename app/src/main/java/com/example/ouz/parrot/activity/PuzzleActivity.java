@@ -72,9 +72,14 @@ public class PuzzleActivity extends AppCompatActivity {
         vwPager2.addOnPageChangeListener(pageListener);
         vwPager3.addOnPageChangeListener(pageListener);
 
+        vwPager1.setCurrentItem(1);
+        vwPager2.setCurrentItem(2);
+        vwPager3.setCurrentItem(0);
+
         btnBaslat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mMiniDrone.takeOff();
                 Basla();
             }
 
@@ -84,10 +89,12 @@ public class PuzzleActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (mMiniDrone.getFlyingState()) {
                     case ARCOMMANDS_MINIDRONE_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_LANDED:
+                        btnAcil.setEnabled(true);
                         mMiniDrone.takeOff();
                         break;
                     case ARCOMMANDS_MINIDRONE_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_FLYING:
                     case ARCOMMANDS_MINIDRONE_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_HOVERING:
+                        btnAcil.setEnabled(true);
                         mMiniDrone.land();
                         break;
                     default:
@@ -102,60 +109,64 @@ public class PuzzleActivity extends AppCompatActivity {
             public void run(){
                 try {
                     synchronized (this){
+                        wait(1500);
+
                         mMiniDrone.setFlag((byte) 1);
-                        mMiniDrone.setPitch((byte) 50); //ileri
+                        mMiniDrone.setPitch((byte) 35); //ileri
                         sleep(1500);
 
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
 
-                        mMiniDrone.setYaw((byte) 20); //sağ dön
-                        sleep(1350);
+                        mMiniDrone.setYaw((byte) 40); //sağ dön
+                        sleep(1500);
 
                         mMiniDrone.setYaw((byte) 0);
 
                         mMiniDrone.setFlag((byte) 1);
-                        mMiniDrone.setPitch((byte) 50); //sağa doğru ilerle
+                        mMiniDrone.setPitch((byte) 35); //sağa doğru ilerle
                         sleep(2000);
 
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
 
-                        mMiniDrone.flip(ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM.FRONT);
+                        wait(1500);
+
+                        mMiniDrone.flip(ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM.BACK);
 
                         mMiniDrone.setFlag((byte) 1);
-                        mMiniDrone.setYaw((byte) -20); //sola dön
-                        sleep(1350);
-
-                        mMiniDrone.setFlag((byte) 0);
-                        mMiniDrone.setPitch((byte) 0);
-
-                        mMiniDrone.setFlag((byte) 1);
-                        mMiniDrone.setPitch((byte) 50); // ilerle
+                        mMiniDrone.setYaw((byte) -40); //sola dön
                         sleep(1500);
 
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
 
-                        mMiniDrone.setYaw((byte) -20); //sola dönme
-                        sleep(1350);
+                        mMiniDrone.setFlag((byte) 1);
+                        mMiniDrone.setPitch((byte) 35); // ilerle
+                        sleep(1500);
+
+                        mMiniDrone.setFlag((byte) 0);
+                        mMiniDrone.setPitch((byte) 0);
+
+                        mMiniDrone.setYaw((byte) -40); //sola dönme
+                        sleep(1500);
 
                         mMiniDrone.setYaw((byte) 0);
 
                         mMiniDrone.setFlag((byte) 1);
-                        mMiniDrone.setPitch((byte) 50); //ilerle
+                        mMiniDrone.setPitch((byte) 35); //ilerle
                         sleep(1000);
 
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
 
-                        mMiniDrone.setYaw((byte) 20); //sağa  dönme
-                        sleep(1350);
+                        mMiniDrone.setYaw((byte) 40); //sağa  dönme
+                        sleep(1500);
 
                         mMiniDrone.setYaw((byte) 0);
 
                         mMiniDrone.setFlag((byte) 1);
-                        mMiniDrone.setPitch((byte) 50);
+                        mMiniDrone.setPitch((byte) 35);
                         sleep(1500);
 
                         mMiniDrone.setFlag((byte) 0);
@@ -163,6 +174,9 @@ public class PuzzleActivity extends AppCompatActivity {
 
                         mMiniDrone.flip(ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM.BACK);
 
+                        wait(1500);
+
+                        mMiniDrone.land();
                     }
                 }
                 catch (Exception e){
@@ -174,7 +188,6 @@ public class PuzzleActivity extends AppCompatActivity {
             }
         };
 
-        mMiniDrone.takeOff();
         thread.start();
     }
 
@@ -230,11 +243,13 @@ public class PuzzleActivity extends AppCompatActivity {
             {
                 case ARCONTROLLER_DEVICE_STATE_RUNNING:
                     mConnectionProgressDialog.dismiss();
+                    btnAcil.setEnabled(true);
                     break;
 
                 case ARCONTROLLER_DEVICE_STATE_STOPPED:
                     // if the deviceController is stopped, go back to the previous activity
                     mConnectionProgressDialog.dismiss();
+                    btnAcil.setEnabled(true);
                     finish();
                     break;
 
@@ -253,9 +268,11 @@ public class PuzzleActivity extends AppCompatActivity {
             switch (state) {
                 case ARCOMMANDS_MINIDRONE_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_LANDED:
                     btnAcil.setText("Kalk");
+                    btnAcil.setEnabled(true);
                     break;
                 case ARCOMMANDS_MINIDRONE_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_FLYING:
                 case ARCOMMANDS_MINIDRONE_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_HOVERING:
+                    btnAcil.setEnabled(true);
                     btnAcil.setText("İn");
                     break;
                 default:

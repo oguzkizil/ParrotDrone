@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/uc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/EtSol"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp"
+        android:layout_weight="1"
+        android:background="@drawable/buttonstyle"
+        android:text="Uç"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="130dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/grid2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/Etyukari"
+            android:layout_width="28dp"
+            android:layout_height="170dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="26dp"
+            android:layout_marginRight="26dp"
+            android:layout_toLeftOf="@+id/EtYukari3"
+            android:layout_toStartOf="@+id/EtYukari3"
+            android:background="@android:color/holo_red_light"
+            android:ems="10"
+            android:enabled="true"
+            android:visibility="invisible" />
+
+        <EditText
+            android:id="@+id/Etsag"
+            android:layout_width="130dp"
+            android:layout_height="32dp"
+            android:layout_alignTop="@+id/Etyukari"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/holo_red_light"
+            android:ems="10"
+            android:visibility="invisible" />
+
+        <EditText
+            android:id="@+id/EtYukari2"
+            android:layout_width="27dp"
+            android:layout_height="133dp"
+            android:layout_above="@+id/Etsag"
+            android:layout_toEndOf="@+id/EtSol"
+            android:layout_toRightOf="@+id/EtSol"
+            android:background="@android:color/holo_red_light"
+            android:ems="10"
+            android:visibility="invisible" />
+
+        <EditText
+            android:id="@+id/EtSol"
+            android:layout_width="55dp"
+            android:layout_height="32dp"
+            android:layout_alignLeft="@+id/EtYukari3"
+            android:layout_alignStart="@+id/EtYukari3"
+            android:layout_below="@+id/EtYukari3"
+            android:background="@android:color/holo_red_light"
+            android:ems="10"
+            android:visibility="invisible" />
+
+        <EditText
+            android:id="@+id/EtYukari3"
+            android:layout_width="30dp"
+            android:layout_height="207dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/holo_red_light"
+            android:ems="10"
+            android:visibility="invisible" />
+
+        <EditText
+            android:id="@+id/EtSag2"
+            android:layout_width="135dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/EtYukari3"
+            android:layout_toRightOf="@+id/EtYukari3"
+            android:background="@android:color/holo_red_light"
+            android:ems="10"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="horizontal"
+        android:paddingTop="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/yukari"
+            android:layout_width="65dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/buttonstyle"
+            android:text="Yukarı"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/asagi"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/buttonstyle"
+            android:text="Aşağı"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/sag"
+            android:layout_width="45dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/buttonstyle"
+            android:text="Sağ"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/sol"
+            android:layout_width="45dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/buttonstyle"
+            android:text="Sol"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/donme"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/buttonstyle"
+            android:text="Takla"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>
