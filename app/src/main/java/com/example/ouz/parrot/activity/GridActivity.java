@@ -386,7 +386,7 @@ public class GridActivity extends AppCompatActivity {
     public void CDAlert(){
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Tebrikler Doğru Kombinasyon!");
-        alertDialog.setMessage("Lütfen bekleyiniz. 00:10");
+        alertDialog.setMessage("Lütfen bekleyiniz. 00:20");
         alertDialog.setCancelable(false);
         WindowManager.LayoutParams wmlp = alertDialog.getWindow().getAttributes();
 
@@ -396,7 +396,7 @@ public class GridActivity extends AppCompatActivity {
         alertDialog.show();
 
 
-        new CountDownTimer(10000, 1000) {
+        new CountDownTimer(20000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 alertDialog.setMessage("Lütfen bekleyiniz. 00:"+ (millisUntilFinished/1000));

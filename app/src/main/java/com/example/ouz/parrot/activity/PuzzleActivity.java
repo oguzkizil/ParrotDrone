@@ -136,7 +136,7 @@ public class PuzzleActivity extends AppCompatActivity {
             public void run(){
                 try {
                     synchronized (this){
-                        wait(5500);
+                        wait(1500);
 
                         mMiniDrone.setFlag((byte) 1);
                         mMiniDrone.setPitch((byte) 35); //ileri
@@ -259,7 +259,7 @@ public class PuzzleActivity extends AppCompatActivity {
     public void CDAlert(){
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Tebrikler Doğru Kombinasyon!");
-        alertDialog.setMessage("Lütfen bekleyiniz. 00:10"); //zaman ayarı değişirse texti de değiştir
+        alertDialog.setMessage("Lütfen bekleyiniz. 00:18"); //zaman ayarı değişirse texti de değiştir
         alertDialog.setCancelable(false);
         WindowManager.LayoutParams wmlp = alertDialog.getWindow().getAttributes();
 
@@ -269,7 +269,7 @@ public class PuzzleActivity extends AppCompatActivity {
         alertDialog.show();
 
 
-        new CountDownTimer(10000, 1000) { //zaman ayarı
+        new CountDownTimer(18000, 1000) { //zaman ayarı
             @Override
             public void onTick(long millisUntilFinished) {
                 alertDialog.setMessage("Lütfen bekleyiniz. 00:"+ (millisUntilFinished/1000));

@@ -387,7 +387,7 @@ public class DragNDrop extends AppCompatActivity {
     public void CDAlert(){
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Tebrikler Doğru Kombinasyon!");
-        alertDialog.setMessage("Lütfen bekleyiniz. 00:10");
+        alertDialog.setMessage("Lütfen bekleyiniz. 00:18");
         alertDialog.setCancelable(false);
         WindowManager.LayoutParams wmlp = alertDialog.getWindow().getAttributes();
 
@@ -397,7 +397,7 @@ public class DragNDrop extends AppCompatActivity {
         alertDialog.show();
 
 
-        new CountDownTimer(10000, 1000) {
+        new CountDownTimer(18000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 alertDialog.setMessage("Lütfen bekleyiniz. 00:"+ (millisUntilFinished/1000));
