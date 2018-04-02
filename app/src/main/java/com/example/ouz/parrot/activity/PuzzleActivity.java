@@ -1,12 +1,19 @@
 package com.example.ouz.parrot.activity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -27,6 +34,9 @@ import com.parrot.arsdk.arcontroller.ARControllerCodec;
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 
+import static com.example.ouz.parrot.activity.DeviceListActivity.EXTRA_DEVICE_SERVICE;
+import static com.parrot.arsdk.arcommands.ARCOMMANDS_MINIDRONE_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_ENUM.ARCOMMANDS_MINIDRONE_PILOTINGSTATE_FLYINGSTATECHANGED_STATE_LANDED;
+
 
 public class PuzzleActivity extends AppCompatActivity {
 
@@ -34,13 +44,17 @@ public class PuzzleActivity extends AppCompatActivity {
     ViewPager vwPager2;
     ViewPager vwPager3;
     Button btnBaslat;
-    Button btnAcil;
+    Button btnAcil,btnDon;
     TextView txtBatarya;
-    Thread thread;
+    Thread thread,thread2;
 
-    private MiniDrone mMiniDrone;
+    public static MiniDrone mMiniDrone;
 
     private ProgressDialog mConnectionProgressDialog;
+
+    public static ARDiscoveryDeviceService service;
+
+    AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +70,7 @@ public class PuzzleActivity extends AppCompatActivity {
         txtBatarya = (TextView) findViewById(R.id.txtBatarya);
 
         Intent intent = getIntent();
-        ARDiscoveryDeviceService service = intent.getParcelableExtra(DeviceListActivity.EXTRA_DEVICE_SERVICE);
+        service = intent.getParcelableExtra(EXTRA_DEVICE_SERVICE);
         mMiniDrone = new MiniDrone(this, service);
         mMiniDrone.addListener(mMiniDroneListener);
 
@@ -76,11 +90,23 @@ public class PuzzleActivity extends AppCompatActivity {
         vwPager2.setCurrentItem(2);
         vwPager3.setCurrentItem(0);
 
-        btnBaslat.setOnClickListener(new View.OnClickListener() {
+        btnDon=findViewById(R.id.btnDon1);
+        btnDon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mMiniDrone.takeOff();
+                GeriDon();
+            }
+        });
+
+        btnBaslat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnBaslat.setEnabled(false);
+                mMiniDrone.takeOff();
                 Basla();
+                //btnDon.setVisibility(View.VISIBLE);
+                btnBaslat.setVisibility(View.INVISIBLE);
             }
 
         });
@@ -109,7 +135,7 @@ public class PuzzleActivity extends AppCompatActivity {
             public void run(){
                 try {
                     synchronized (this){
-                        wait(1500);
+                        wait(5500);
 
                         mMiniDrone.setFlag((byte) 1);
                         mMiniDrone.setPitch((byte) 35); //ileri
@@ -118,7 +144,7 @@ public class PuzzleActivity extends AppCompatActivity {
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
 
-                        mMiniDrone.setYaw((byte) 40); //sağ dön
+                        mMiniDrone.setYaw((byte) 45); //sağ dön
                         sleep(1500);
 
                         mMiniDrone.setYaw((byte) 0);
@@ -134,12 +160,13 @@ public class PuzzleActivity extends AppCompatActivity {
 
                         mMiniDrone.flip(ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM.BACK);
 
+                        wait(1500);
+
                         mMiniDrone.setFlag((byte) 1);
-                        mMiniDrone.setYaw((byte) -40); //sola dön
+                        mMiniDrone.setYaw((byte) -45); //sola dön
                         sleep(1500);
 
-                        mMiniDrone.setFlag((byte) 0);
-                        mMiniDrone.setPitch((byte) 0);
+                        mMiniDrone.setYaw((byte) 0);
 
                         mMiniDrone.setFlag((byte) 1);
                         mMiniDrone.setPitch((byte) 35); // ilerle
@@ -148,7 +175,7 @@ public class PuzzleActivity extends AppCompatActivity {
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
 
-                        mMiniDrone.setYaw((byte) -40); //sola dönme
+                        mMiniDrone.setYaw((byte) -45); //sola dönme
                         sleep(1500);
 
                         mMiniDrone.setYaw((byte) 0);
@@ -160,7 +187,7 @@ public class PuzzleActivity extends AppCompatActivity {
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
 
-                        mMiniDrone.setYaw((byte) 40); //sağa  dönme
+                        mMiniDrone.setYaw((byte) 45); //sağa  dönme
                         sleep(1500);
 
                         mMiniDrone.setYaw((byte) 0);
@@ -177,6 +204,9 @@ public class PuzzleActivity extends AppCompatActivity {
                         wait(1500);
 
                         mMiniDrone.land();
+                        wait(1000);
+
+
                     }
                 }
                 catch (Exception e){
@@ -187,8 +217,71 @@ public class PuzzleActivity extends AppCompatActivity {
                 }
             }
         };
-
         thread.start();
+        CDAlert();
+    }
+
+
+    public void GeriDon(){
+        thread2 = new Thread(){
+            @Override
+            public void run(){
+                try {
+                    synchronized (this){
+
+                        mMiniDrone.setFlag((byte) 1);
+                        mMiniDrone.setPitch((byte) -35); //ileri
+                        sleep(4500);
+                        mMiniDrone.setFlag((byte) 0);
+                        mMiniDrone.setPitch((byte) 0);
+
+                        wait(1500);
+
+                        mMiniDrone.land();
+                    }
+                }
+                catch (Exception e){
+                    Log.d("hata","xd");
+                }finally {
+                    mMiniDrone.land();
+                    thread2.interrupt();
+                    Intent intent1 = new Intent(PuzzleActivity.this,DragNDrop.class);
+                    intent1.putExtra(EXTRA_DEVICE_SERVICE, service);
+                    startActivity(intent1);
+                }
+            }
+        };
+        thread2.start();
+    }
+
+    //Countdown alert;
+    public void CDAlert(){
+        alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Tebrikler Doğru Kombinasyon!");
+        alertDialog.setMessage("Lütfen bekleyiniz. 00:10");
+        alertDialog.setCancelable(false);
+        WindowManager.LayoutParams wmlp = alertDialog.getWindow().getAttributes();
+
+        wmlp.gravity = Gravity.TOP | Gravity.LEFT;
+        wmlp.x = 90;   //x position
+        wmlp.y = 1100;   //y position
+        alertDialog.show();
+
+
+        new CountDownTimer(10000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                alertDialog.setMessage("Lütfen bekleyiniz. 00:"+ (millisUntilFinished/1000));
+            }
+
+            @Override
+            public void onFinish() {
+                alertDialog.cancel();
+                btnDon.setEnabled(true);
+                btnDon.setVisibility(View.VISIBLE);
+            }
+        }.start();
+
     }
 
     @Override
@@ -324,26 +417,44 @@ public class PuzzleActivity extends AppCompatActivity {
     };
 
 
+
+    //Geri Butonu
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            mMiniDrone.dispose();
+            mConnectionProgressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
+            mConnectionProgressDialog.setIndeterminate(true);
+            mConnectionProgressDialog.setMessage("Bağlantı Kesiliyor ...");
+            mConnectionProgressDialog.setCancelable(false);
+            mConnectionProgressDialog.show();
+
+            if (!mMiniDrone.disconnect()) {
+                finish();
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 //Sayfa değişimi
-    private class PageListener implements ViewPager.OnPageChangeListener {
-        private int currentPage;
+private class PageListener implements ViewPager.OnPageChangeListener {
+    private int currentPage;
 
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
-
-        public void onPageSelected(int position) {
-            currentPage = position;
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-            if((vwPager1.getCurrentItem()==0)&&(vwPager2.getCurrentItem()==1)&&(vwPager3.getCurrentItem()==2))
-                btnBaslat.setEnabled(true);
-            else
-                btnBaslat.setEnabled(false);
-        }
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
     }
+
+    public void onPageSelected(int position) {
+        currentPage = position;
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        if((vwPager1.getCurrentItem()==0)&&(vwPager2.getCurrentItem()==1)&&(vwPager3.getCurrentItem()==2))
+            btnBaslat.setEnabled(true);
+        else
+            btnBaslat.setEnabled(false);
+    }
+
+}
 }

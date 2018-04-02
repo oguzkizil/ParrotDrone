@@ -33,6 +33,7 @@
             android:layout_marginTop="5dp"
             android:text="Parrot Mambo"
             android:textColor="@color/white"
+
             android:textSize="25dp"
             android:textStyle="bold" />
 
@@ -52,7 +53,9 @@
             <ListView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="294dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
                 android:textColor="@color/colorAccent">
 
             </ListView>

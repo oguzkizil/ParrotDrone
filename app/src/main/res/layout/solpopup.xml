@@ -46,7 +46,8 @@
             android:background="@color/white"
             android:ems="10"
             android:hint="Kaç Birim"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textAlignment="center" />
     </LinearLayout>
 
     <Button
