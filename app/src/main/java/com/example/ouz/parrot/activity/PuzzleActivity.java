@@ -90,6 +90,7 @@ public class PuzzleActivity extends AppCompatActivity {
         vwPager2.setCurrentItem(2);
         vwPager3.setCurrentItem(0);
 
+        //Drone bir sonraki harita için geri gelecek
         btnDon=findViewById(R.id.btnDon1);
         btnDon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,7 +219,7 @@ public class PuzzleActivity extends AppCompatActivity {
             }
         };
         thread.start();
-        CDAlert();
+        CDAlert(); //Drone hareket halindeyken kullanıcıyı bekleten fonks.
     }
 
 
@@ -245,7 +246,7 @@ public class PuzzleActivity extends AppCompatActivity {
                 }finally {
                     mMiniDrone.land();
                     thread2.interrupt();
-                    Intent intent1 = new Intent(PuzzleActivity.this,DragNDrop.class);
+                    Intent intent1 = new Intent(PuzzleActivity.this,DragNDrop.class); //drone geri geldikten sonra bir sonraki haritaya geçilir.
                     intent1.putExtra(EXTRA_DEVICE_SERVICE, service);
                     startActivity(intent1);
                 }
@@ -258,7 +259,7 @@ public class PuzzleActivity extends AppCompatActivity {
     public void CDAlert(){
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Tebrikler Doğru Kombinasyon!");
-        alertDialog.setMessage("Lütfen bekleyiniz. 00:10");
+        alertDialog.setMessage("Lütfen bekleyiniz. 00:10"); //zaman ayarı değişirse texti de değiştir
         alertDialog.setCancelable(false);
         WindowManager.LayoutParams wmlp = alertDialog.getWindow().getAttributes();
 
@@ -268,7 +269,7 @@ public class PuzzleActivity extends AppCompatActivity {
         alertDialog.show();
 
 
-        new CountDownTimer(10000, 1000) {
+        new CountDownTimer(10000, 1000) { //zaman ayarı
             @Override
             public void onTick(long millisUntilFinished) {
                 alertDialog.setMessage("Lütfen bekleyiniz. 00:"+ (millisUntilFinished/1000));
@@ -435,7 +436,8 @@ public class PuzzleActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-//Sayfa değişimi
+
+//puzzle da Sayfa değişimi
 private class PageListener implements ViewPager.OnPageChangeListener {
     private int currentPage;
 
