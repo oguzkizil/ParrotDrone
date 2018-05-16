@@ -106,7 +106,6 @@ public class PuzzleActivity extends AppCompatActivity {
                 btnBaslat.setEnabled(false);
                 mMiniDrone.takeOff();
                 Basla();
-                //btnDon.setVisibility(View.VISIBLE);
                 btnBaslat.setVisibility(View.INVISIBLE);
             }
 
@@ -136,6 +135,7 @@ public class PuzzleActivity extends AppCompatActivity {
             public void run(){
                 try {
                     synchronized (this){
+
                         wait(1500);
 
                         mMiniDrone.setFlag((byte) 1);
@@ -145,6 +145,7 @@ public class PuzzleActivity extends AppCompatActivity {
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
 
+                        wait(500);
                         mMiniDrone.setYaw((byte) 45); //sağ dön
                         sleep(1500);
 
@@ -176,6 +177,7 @@ public class PuzzleActivity extends AppCompatActivity {
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
 
+                        wait(500);
                         mMiniDrone.setYaw((byte) -45); //sola dönme
                         sleep(1500);
 
@@ -224,15 +226,17 @@ public class PuzzleActivity extends AppCompatActivity {
 
 
     public void GeriDon(){
+        mMiniDrone.takeOff();
         thread2 = new Thread(){
             @Override
             public void run(){
                 try {
                     synchronized (this){
 
+                        wait(500);
                         mMiniDrone.setFlag((byte) 1);
                         mMiniDrone.setPitch((byte) -35); //ileri
-                        sleep(4500);
+                        sleep(3500);
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
 
@@ -259,17 +263,17 @@ public class PuzzleActivity extends AppCompatActivity {
     public void CDAlert(){
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Tebrikler Doğru Kombinasyon!");
-        alertDialog.setMessage("Lütfen bekleyiniz. 00:18"); //zaman ayarı değişirse texti de değiştir
+        alertDialog.setMessage("Lütfen bekleyiniz. 00:22"); //zaman ayarı değişirse texti de değiştir
         alertDialog.setCancelable(false);
         WindowManager.LayoutParams wmlp = alertDialog.getWindow().getAttributes();
 
         wmlp.gravity = Gravity.TOP | Gravity.LEFT;
-        wmlp.x = 90;   //x position
-        wmlp.y = 1100;   //y position
+        wmlp.x = 250;   //x position
+        wmlp.y = 2000;   //y position
         alertDialog.show();
 
 
-        new CountDownTimer(18000, 1000) { //zaman ayarı
+        new CountDownTimer(22000, 1000) { //zaman ayarı
             @Override
             public void onTick(long millisUntilFinished) {
                 alertDialog.setMessage("Lütfen bekleyiniz. 00:"+ (millisUntilFinished/1000));
@@ -307,7 +311,7 @@ public class PuzzleActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mMiniDrone != null)
+       /* if (mMiniDrone != null)
         {
             mConnectionProgressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
             mConnectionProgressDialog.setIndeterminate(true);
@@ -320,7 +324,7 @@ public class PuzzleActivity extends AppCompatActivity {
             }
         } else {
             finish();
-        }
+        }*/
     }
 
     @Override
@@ -417,25 +421,6 @@ public class PuzzleActivity extends AppCompatActivity {
         }
     };
 
-
-
-    //Geri Butonu
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            mMiniDrone.dispose();
-            mConnectionProgressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
-            mConnectionProgressDialog.setIndeterminate(true);
-            mConnectionProgressDialog.setMessage("Bağlantı Kesiliyor ...");
-            mConnectionProgressDialog.setCancelable(false);
-            mConnectionProgressDialog.show();
-
-            if (!mMiniDrone.disconnect()) {
-                finish();
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 
 //puzzle da Sayfa değişimi
 private class PageListener implements ViewPager.OnPageChangeListener {

@@ -63,9 +63,9 @@ public class DragNDrop extends AppCompatActivity {
     LinearLayout kaynakAlan;
     public static int kontrol=0;
     public static int btnkontrol=0;
-    ImageView yukari,uc,sol,sag,harita1,harita2,harita3,harita4,harita5,harita6,harita7,harita8,harita9;
+    ImageView yukari,uc,sol,sag,harita1,harita2,harita3,harita4,harita5,harita6,harita7,harita8,harita9,star;
 
-    public static ARDiscoveryDeviceService service;
+    public ARDiscoveryDeviceService service;
     AlertDialog alertDialog;
 
     @Override
@@ -82,6 +82,8 @@ public class DragNDrop extends AppCompatActivity {
         txtBatarya = (TextView) findViewById(R.id.txtBatarya);
         btnAcil=findViewById(R.id.btnAcil);
         uc=findViewById(R.id.iv_uc);
+
+
 
         btnAcil.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -135,6 +137,7 @@ public class DragNDrop extends AppCompatActivity {
         harita7=(ImageView)findViewById(R.id.imageView7);
         harita8=(ImageView)findViewById(R.id.imageView8);
         harita9=(ImageView)findViewById(R.id.imageView9);
+        star = (ImageView)findViewById(R.id.iv_star);
 
 
         kaynakAlan.setOnDragListener(new View.OnDragListener() {
@@ -163,7 +166,7 @@ public class DragNDrop extends AppCompatActivity {
                             harita2.setImageResource(R.drawable.blue);
                             kontrol++;
                         }
-                        else if(kontrol==2 && btnkontrol==2){
+                        else if(kontrol==2 && btnkontrol==4){
                             harita3.setBackgroundResource(R.drawable.blue);
                             harita3.setImageResource(R.drawable.blue);
                             kontrol++;
@@ -229,6 +232,18 @@ public class DragNDrop extends AppCompatActivity {
             }
         });
 
+        star.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent arg1) {
+                // TODO Auto-generated method stub
+                ClipData veri = ClipData.newPlainText("", "");
+                View.DragShadowBuilder golge = new View.DragShadowBuilder(yukari);
+                v.startDrag(veri, golge, null, 0);
+                btnkontrol=4;
+                return false;
+            }
+        });
+
 
         sol.setOnTouchListener(new View.OnTouchListener() {
 
@@ -273,12 +288,13 @@ public class DragNDrop extends AppCompatActivity {
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
 
+                        wait(1500);
+
                         mMiniDrone.flip(ARCOMMANDS_ANIMATION_FLIP_TYPE_ENUM.BACK);
-                        wait(2000);
 
-                        mMiniDrone.setYaw((byte) 0);
+                        wait(1500);
 
-                        mMiniDrone.setYaw((byte) -45); //sol dön
+                        mMiniDrone.setYaw((byte) -45); //sola dön
                         sleep(1500);
 
                         mMiniDrone.setYaw((byte) 0);
@@ -296,17 +312,15 @@ public class DragNDrop extends AppCompatActivity {
 
                         mMiniDrone.setYaw((byte) 0);
 
-                        mMiniDrone.setFlag((byte) 0);
-                        mMiniDrone.setPitch((byte) 0);
-
                         mMiniDrone.setFlag((byte) 1);
-                        mMiniDrone.setPitch((byte) 35); //sola ilerle
+                        mMiniDrone.setPitch((byte) 35); // ilerle
                         sleep(1500);
 
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
 
-                        mMiniDrone.setYaw((byte) 45); //saga dönme
+                        wait(500);
+                        mMiniDrone.setYaw((byte) 45); //sağa dönme
                         sleep(1500);
 
                         mMiniDrone.setYaw((byte) 0);
@@ -335,6 +349,8 @@ public class DragNDrop extends AppCompatActivity {
                         wait(1500);
 
                         mMiniDrone.land();
+                        wait(1000);
+
                     }
                 }
                 catch (Exception e){
@@ -342,6 +358,7 @@ public class DragNDrop extends AppCompatActivity {
                 }finally {
                     mMiniDrone.land();
                     thread.interrupt();
+
                 }
             }
         };
@@ -359,7 +376,7 @@ public class DragNDrop extends AppCompatActivity {
 
                         mMiniDrone.setFlag((byte) 1);
                         mMiniDrone.setPitch((byte) -35); //ileri
-                        sleep(4500);
+                        sleep(4000);
 
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
@@ -387,17 +404,17 @@ public class DragNDrop extends AppCompatActivity {
     public void CDAlert(){
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Tebrikler Doğru Kombinasyon!");
-        alertDialog.setMessage("Lütfen bekleyiniz. 00:18");
+        alertDialog.setMessage("Lütfen bekleyiniz. 00:22");
         alertDialog.setCancelable(false);
         WindowManager.LayoutParams wmlp = alertDialog.getWindow().getAttributes();
 
         wmlp.gravity = Gravity.TOP | Gravity.LEFT;
-        wmlp.x = 90;   //x position
-        wmlp.y = 1100;   //y position
+        wmlp.x = 250;   //x position
+        wmlp.y = 2000;   //y position
         alertDialog.show();
 
 
-        new CountDownTimer(18000, 1000) {
+        new CountDownTimer(22000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 alertDialog.setMessage("Lütfen bekleyiniz. 00:"+ (millisUntilFinished/1000));
@@ -487,7 +504,7 @@ public class DragNDrop extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mMiniDrone != null)
+       /* if (mMiniDrone != null)
         {
             mConnectionProgressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
             mConnectionProgressDialog.setIndeterminate(true);
@@ -500,7 +517,8 @@ public class DragNDrop extends AppCompatActivity {
             }
         } else {
             finish();
-        }
+        }*/
+
     }
 
     @Override

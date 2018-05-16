@@ -8,27 +8,27 @@
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vwPager1"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vwPager2"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:layout_marginTop="135dp"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="150dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vwPager3"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:layout_marginTop="260dp"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="280dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

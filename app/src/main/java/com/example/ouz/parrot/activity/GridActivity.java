@@ -45,13 +45,13 @@ public class GridActivity extends AppCompatActivity {
     Dialog yukaripopup,asagipopup,solpopup,sagpopup,donmepopup;
 
     public static int kontrol =0;
-    public static ARDiscoveryDeviceService service;
+    public ARDiscoveryDeviceService service;
     ImageView imageview;
 
 
     Thread thread,thread2;
 
-    public static MiniDrone mMiniDrone;
+    public MiniDrone mMiniDrone;
 
     private ProgressDialog mConnectionProgressDialog;
 
@@ -66,6 +66,7 @@ public class GridActivity extends AppCompatActivity {
         service = PuzzleActivity.service;
         mMiniDrone = PuzzleActivity.mMiniDrone;
         mMiniDrone.addListener(mMiniDroneListener);
+
         imageview= findViewById(R.id.gorev3);
         txtBatarya = (TextView) findViewById(R.id.txtBatarya);
         yukari=findViewById(R.id.yukari);
@@ -88,6 +89,7 @@ public class GridActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mMiniDrone.takeOff();
                 GeriDon();
+
             }
         });
 
@@ -260,14 +262,14 @@ public class GridActivity extends AppCompatActivity {
                 try {
                     synchronized (this){
 
+                        wait(500);
                         mMiniDrone.setFlag((byte) 1);
                         mMiniDrone.setPitch((byte) -35); //ileri
-                        sleep(8750);
-
+                        sleep(4000);
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
 
-                        wait(500);
+                        wait(1500);
 
                         mMiniDrone.land();
                     }
@@ -282,6 +284,7 @@ public class GridActivity extends AppCompatActivity {
             }
         };
         thread2.start();
+        FinishMission();
     }
 
     public void Uc(){
@@ -290,6 +293,7 @@ public class GridActivity extends AppCompatActivity {
             public void run(){
                 try {
                     synchronized (this){
+
                         wait(1500);
 
                         mMiniDrone.setFlag((byte) 1);
@@ -299,6 +303,7 @@ public class GridActivity extends AppCompatActivity {
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
 
+                        wait(750);
                         mMiniDrone.setYaw((byte) 45); //sağ dön
                         sleep(1500);
 
@@ -306,7 +311,7 @@ public class GridActivity extends AppCompatActivity {
 
                         mMiniDrone.setFlag((byte) 1);
                         mMiniDrone.setPitch((byte) 35); //sağa doğru ilerle
-                        sleep(2000);
+                        sleep(1000);
 
                         mMiniDrone.setFlag((byte) 0);
                         mMiniDrone.setPitch((byte) 0);
@@ -386,17 +391,17 @@ public class GridActivity extends AppCompatActivity {
     public void CDAlert(){
         alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("Tebrikler Doğru Kombinasyon!");
-        alertDialog.setMessage("Lütfen bekleyiniz. 00:20");
+        alertDialog.setMessage("Lütfen bekleyiniz. 00:24");
         alertDialog.setCancelable(false);
         WindowManager.LayoutParams wmlp = alertDialog.getWindow().getAttributes();
 
         wmlp.gravity = Gravity.TOP | Gravity.LEFT;
-        wmlp.x = 90;   //x position
-        wmlp.y = 1100;   //y position
+        wmlp.x = 250;   //x position
+        wmlp.y = 2000;   //y position
         alertDialog.show();
 
 
-        new CountDownTimer(20000, 1000) {
+        new CountDownTimer(24000, 1000) {//24
             @Override
             public void onTick(long millisUntilFinished) {
                 alertDialog.setMessage("Lütfen bekleyiniz. 00:"+ (millisUntilFinished/1000));
@@ -409,6 +414,35 @@ public class GridActivity extends AppCompatActivity {
                 uc.setWidth(0);
                 btndon.setWidth(250);
                 btndon.setVisibility(View.VISIBLE);
+            }
+        }.start();
+
+    }
+
+    public void FinishMission(){
+        alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("MISSION COMPLETED");
+        alertDialog.setMessage("Lütfen bekleyiniz. 00:15");
+        alertDialog.setCancelable(false);
+        WindowManager.LayoutParams wmlp = alertDialog.getWindow().getAttributes();
+
+        wmlp.gravity = Gravity.TOP | Gravity.LEFT;
+        wmlp.x = 220;   //x position
+        wmlp.y = 2000;   //y position
+        alertDialog.show();
+
+
+        new CountDownTimer(15000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                alertDialog.setMessage("Lütfen bekleyiniz. 00:"+ (millisUntilFinished/1000));
+            }
+
+            @Override
+            public void onFinish() {
+                alertDialog.cancel();
+
+                PuzzleActivity.mMiniDrone.disconnect();
             }
         }.start();
 
@@ -436,7 +470,7 @@ public class GridActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mMiniDrone != null)
+         /*   if (mMiniDrone != null)
         {
             mConnectionProgressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
             mConnectionProgressDialog.setIndeterminate(true);
@@ -445,11 +479,12 @@ public class GridActivity extends AppCompatActivity {
             mConnectionProgressDialog.show();
 
             if (!mMiniDrone.disconnect()) {
-                finish();
+                PuzzleActivity.mMiniDrone.disconnect();
             }
+
         } else {
             finish();
-        }
+        }*/
     }
 
     @Override
@@ -471,9 +506,11 @@ public class GridActivity extends AppCompatActivity {
 
                 case ARCONTROLLER_DEVICE_STATE_STOPPED:
                     // if the deviceController is stopped, go back to the previous activity
-                    mConnectionProgressDialog.dismiss();
+                    //mConnectionProgressDialog.dismiss();
                     btnAcil.setEnabled(true);
-                    finish();
+
+                    Intent intent = new Intent(GridActivity.this,MainActivity.class);
+                    startActivity(intent);
                     break;
 
                 default:
