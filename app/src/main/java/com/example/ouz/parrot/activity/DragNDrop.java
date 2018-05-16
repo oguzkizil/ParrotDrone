@@ -20,19 +20,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ouz.parrot.R;
 import com.example.ouz.parrot.drone.MiniDrone;
@@ -45,11 +32,6 @@ import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
 import com.parrot.arsdk.arcontroller.ARControllerCodec;
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
-
-import java.io.Console;
-
-import static com.example.ouz.parrot.activity.DeviceListActivity.EXTRA_DEVICE_SERVICE;
-
 
 import static com.example.ouz.parrot.activity.DeviceListActivity.EXTRA_DEVICE_SERVICE;
 
