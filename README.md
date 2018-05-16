@@ -1,7 +1,7 @@
 # Parrot Mambo Drone Programlama
 
     Bu projede Parrot Mambo Drone kullanılarak çocuklara temel algoritma becerisi kazandırılmak istenmiştir.
-  Uygulama, bulmacaların çözülmesi ile ortaya çıkan şekillerin drone tarafından otomatik bir şekilde takip edilmesi şeklinde çalışıyor.
+  Uygulama, bulmacaların çözülmesi ile ortaya çıkan dizaynın drone tarafından otomatik bir şekilde takip edilmesi şeklinde çalışıyor.
   
   Projede işleyiş drone ile bağlantı kurulup, 3 adet bulmacanın çözülmesi üzerinedir. Bu bulmacalar;
   
